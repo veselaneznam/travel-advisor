@@ -9,7 +9,82 @@
 namespace App\Controller;
 
 
-class APIController
-{
+use App\Services\BoardingCardRepresenter;
+use App\Services\BoardingCardServiceInterface;
+use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
+class APIController extends Controller
+{
+    /**
+     * @var BoardingCardServiceInterface
+     */
+    private $boardingCardService;
+    /**
+     * @var BoardingCardRepresenter
+     */
+    private $boardingCardRepresenter;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * APIController constructor.
+     * @param BoardingCardServiceInterface $boardingCardService
+     * @param BoardingCardRepresenter $boardingCardRepresenter
+     * @param LoggerInterface $logger
+     */
+    public function __construct(
+        BoardingCardServiceInterface $boardingCardService,
+        BoardingCardRepresenter $boardingCardRepresenter,
+        LoggerInterface $logger
+    )
+    {
+        $this->boardingCardService = $boardingCardService;
+        $this->boardingCardRepresenter = $boardingCardRepresenter;
+        $this->logger = $logger;
+    }
+
+    /**
+     * List sorted boarding cards instructions.
+     *
+     *
+     * @Route("/api/boarding-cards/sort", methods={"POST"})
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns travel cards instructions sorted",
+     * )
+     * @SWG\Tag(name="sort")
+     */
+    public function sortAction(Request $request)
+    {
+        try {
+            $requestBody = $request->getContent();
+            foreach ($requestBody as $item) {
+                $unsortedBoardingCards[] = $this->boardingCardRepresenter->toDomain($item);
+            }
+            $sortedBoardingCards = $this->boardingCardService->sort($unsortedBoardingCards);
+
+            $result = [];
+
+            /**
+             * @var BoardingCardInterface $boardingCard
+             */
+            foreach ($sortedBoardingCards as $boardingCard) {
+                $result[] = $boardingCard->getInstructions();
+            }
+
+            return new JsonResponse($result, 200);
+        } catch (\Exception $exception) {
+            if($exception->getCode() == 400) {
+                return new JsonResponse($exception->getMessage(), $exception->getCode());
+            }
+            $this->logger->error($exception->getMessage(), $exception->getCode());
+        }
+    }
 }
