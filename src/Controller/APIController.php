@@ -66,12 +66,16 @@ class APIController extends Controller
     {
         try {
             $requestBody = json_decode($request->getContent());
-            foreach ($requestBody as $item) {
-                $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
-            }
-            $sortedBoardingCards = $this->boardingCardService->sort($unsortedBoardingCards);
+            if (!empty($requestBody)) {
+                foreach ($requestBody as $item) {
+                    $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
+                }
+                $sortedBoardingCards = $this->boardingCardService->sort($unsortedBoardingCards);
 
-            return new JsonResponse($sortedBoardingCards, 200);
+                return new JsonResponse($sortedBoardingCards, 200);
+            } else {
+                return new JsonResponse('You have provided bad request', 400);
+            }
         } catch (\Exception $exception) {
             if($exception->getCode() == 400) {
                 return new JsonResponse($exception->getMessage(), $exception->getCode());

@@ -24,8 +24,10 @@ class BoardingCardService implements BoardingCardServiceInterface
         $head = [];
         while(count($boardingCardList) > 0) {
            list($firstBoardingCard, $key) = $this->getFirst($boardingCardList);
-           unset($boardingCardList[$key]);
-           $head[] = $firstBoardingCard;
+           if(null !== $key && null !== $firstBoardingCard) {
+               unset($boardingCardList[$key]);
+               $head[] = $firstBoardingCard;
+           }
         }
 
         return array_map(function(BoardingCardInterface $element) {
@@ -45,5 +47,6 @@ class BoardingCardService implements BoardingCardServiceInterface
                 return [$boardingCard, $key];
             }
         }
+        return [null, null];
     }
 }

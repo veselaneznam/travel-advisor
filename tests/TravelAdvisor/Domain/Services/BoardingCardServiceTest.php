@@ -38,6 +38,22 @@ class BoardingCardServiceTest extends TestCase
     }
 
     /**
+     * @expectedException \App\TravelAdvisor\Domain\Exceptions\MissingArgumentException
+     */
+    public function testGetFirstFail()
+    {
+        $requestBody = json_decode('{}');
+        $unsortedBoardingCards = [];
+        foreach ($requestBody as $item) {
+            $unsortedBoardingCards[] = BoardingCardJsonRepresenter::toDomain($item);
+        }
+
+        $boardingcardService = new BoardingCardService();
+        list($firstElement, $key) = $boardingcardService->getFirst($unsortedBoardingCards);
+
+    }
+
+    /**
      * @param $jsonString
      *
      * @param $expected
@@ -91,7 +107,7 @@ class BoardingCardServiceTest extends TestCase
                     4 => '{"instructions":"You have arrived at your final destination."}',
                 )
             ],
-            'dataset 1 unsorted list' => [
+            'dataset 2 unsorted list' => [
                 'jsonString' => file_get_contents(__DIR__ . '/data/unsorted_cards.json'),
                 'expected' => array (
                     0 => '{"instructions":"Take the bus from Bus Station to Sofia Airport. No seat assignment."}',
@@ -99,6 +115,15 @@ class BoardingCardServiceTest extends TestCase
                     2 => '{"instructions":"Take the bus from Plovdiv Aiport to Plovdiv Train Station. No seat assignment."}',
                     3 => '{"instructions":"Take train 12WE, from Plovdiv Train Station to Burgas. Sit in seat 1C"}',
                     4 => '{"instructions":"You have arrived at your final destination."}',
+                )
+            ],
+            'dataset 3 unsorted list' => [
+                'jsonString' => file_get_contents(__DIR__ . '/data/missing_none_card.json'),
+                'expected' => array (
+                    0 => '{"instructions":"Take the bus from Bus Station to Sofia Airport. No seat assignment."}',
+                    1 => '{"instructions":"From Sofia, take flight 12323BBB to Plovdiv Aiport. Gate 1C, seat Get your luggage from Gate B11"}',
+                    2 => '{"instructions":"Take the bus from Plovdiv Aiport to Plovdiv Train Station. No seat assignment."}',
+                    3 => '{"instructions":"Take train 12WE, from Plovdiv Train Station to Burgas. Sit in seat 1C"}',
                 )
             ]
         ];

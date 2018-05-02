@@ -29,6 +29,9 @@ class BoardingCardJsonRepresenter implements BoardingCardRepresenter
      */
     public static function toDomain(\stdClass $jsonObject): BoardingCardInterface
     {
+        if (empty($jsonObject)) {
+            throw new MissingArgumentException('Empty object', 400);
+        }
         if (property_exists($jsonObject, 'transportationType')) {
             switch ($jsonObject->transportationType) {
                 case BoardingCardType::AIRPORT: return AirportCard::createFromJson($jsonObject);
@@ -42,7 +45,7 @@ class BoardingCardJsonRepresenter implements BoardingCardRepresenter
                     );
             }
         }
-        throw  new MissingArgumentException('Missing property transportationType', 400);
+        throw new MissingArgumentException('Missing property transportationType', 400);
     }
 
     /**

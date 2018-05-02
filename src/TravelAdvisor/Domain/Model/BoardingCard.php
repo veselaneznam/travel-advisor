@@ -86,4 +86,13 @@ abstract class BoardingCard implements BoardingCardInterface
         }
         return new NullCard();
     }
+
+    /**
+     * @param array $boardingCardList
+     * @return bool
+     */
+    public function isFirst(array $boardingCardList): bool
+    {
+       return ($this->getPrev($boardingCardList) instanceof NullCard) ? true : false;
+    }
 }

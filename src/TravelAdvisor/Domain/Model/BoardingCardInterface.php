@@ -60,6 +60,12 @@ interface BoardingCardInterface
     public function getPrev(array $boardingCards) : BoardingCardInterface;
 
     /**
+     * @param array $boardingCards
+     * @return bool
+     */
+    public function isFirst(array $boardingCards) : bool;
+
+    /**
      * @return array
      */
     public function toArray() : array;
