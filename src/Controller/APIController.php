@@ -54,11 +54,6 @@ class APIController extends Controller
      *
      *
      * @Route("/api/boarding-cards/sort", methods={"POST"})
-     * @SWG\Response(
-     *     response=200,
-     *     description="Returns travel cards instructions sorted",
-     * )
-     * @SWG\Tag(name="sort")
      * @param Request $request
      * @return JsonResponse
      */

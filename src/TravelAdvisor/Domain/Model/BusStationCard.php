@@ -25,12 +25,14 @@ class BusStationCard extends BoardingCard
      * @param string $busNumber
      * @param string $startDirection
      * @param string $endDirection
+     * @param string $seat
      */
-    public function __construct(string $busNumber, string $startDirection, string $endDirection)
+    public function __construct(string $busNumber, string $startDirection, string $endDirection, string $seat)
     {
         $this->startDirection = $startDirection;
         $this->endDirection = $endDirection;
         $this->busNumber = $busNumber;
+        $this->seat = $seat;
     }
 
     /**
@@ -49,12 +51,16 @@ class BusStationCard extends BoardingCard
         if(!property_exists($jsonObject, 'busNumber')) {
             throw new MissingArgumentException('Missing property busNumber', 400);
         }
+        if(!property_exists($jsonObject, 'seat')) {
+            throw new MissingArgumentException('Missing property seat', 400);
+        }
 
         $startDirection = $jsonObject->startDirection;
         $endDirection = $jsonObject->endDirection;
         $busNumber = $jsonObject->busNumber;
+        $seat = $jsonObject->seat;
 
-        return new BusStationCard($busNumber, $startDirection, $endDirection);
+        return new BusStationCard($busNumber, $startDirection, $endDirection, $seat);
     }
 
     /**
@@ -77,13 +83,14 @@ class BusStationCard extends BoardingCard
 
     public function getSeatNumber(): string
     {
-        return 'No seat assignment.';
+        return $this->seat;
     }
 
     public function getInstructions(): string
     {
         return sprintf(
-            'Take the bus from %s to %s. %s',
+            'Take the bus %s from %s to %s. %s',
+            $this->getPointNumber(),
             $this->getStartDirection(),
             $this->getEndDirection(),
             $this->getSeatNumber()

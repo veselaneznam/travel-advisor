@@ -40,14 +40,6 @@ class NullCard extends BoardingCard
     /**
      * @return string
      */
-    public function getLuggageInstructions(): string
-    {
-        return '';
-    }
-
-    /**
-     * @return string
-     */
     public function getSeatNumber(): string
     {
         return '';

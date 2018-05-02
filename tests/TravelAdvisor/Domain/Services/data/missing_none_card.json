@@ -2,7 +2,8 @@
     "transportationType": "bus",
     "startDirection": "Bus Station",
     "endDirection": "Sofia Airport",
-    "busNumber": "B2"
+    "busNumber": "B2",
+    "seat": "No seat assignment."
   },
   {
     "transportationType": "airport",
@@ -17,7 +18,8 @@
     "transportationType": "bus",
     "startDirection": "Plovdiv Aiport",
     "endDirection": "Plovdiv Train Station",
-    "busNumber": "C1"
+    "busNumber": "C1",
+    "seat": "No seat assignment."
   },
   {
     "transportationType": "train",

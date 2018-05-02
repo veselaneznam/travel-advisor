@@ -129,12 +129,12 @@ class AirportCard extends BoardingCard
     public function getInstructions(): string
     {
         return sprintf(
-            'From %s, take flight %s to %s. Gate %s, seat %. %s',
+            'From %s, take flight %s to %s. Gate %s, seat %s. %s',
             $this->getStartDirection(),
             $this->getPointNumber(),
             $this->getEndDirection(),
-            $this->getSeatNumber(),
             $this->getGate(),
+            $this->getSeatNumber(),
             $this->getLuggageInstructions()
         );
     }

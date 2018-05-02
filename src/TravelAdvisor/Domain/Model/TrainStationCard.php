@@ -10,7 +10,6 @@ namespace App\TravelAdvisor\Domain\Model;
 
 
 use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
-use App\TravelAdvisor\Domain\Values\Seat;
 
 class TrainStationCard extends BoardingCard
 {
@@ -26,19 +25,16 @@ class TrainStationCard extends BoardingCard
      * @param string $endDirection
      * @param string $seat
      * @param string $trainNumber
-     * @param string $luggageInstructions
      */
     private function __construct(
         string $startDirection,
         string $endDirection,
         string $seat,
-        string $trainNumber,
-        string $luggageInstructions
+        string $trainNumber
     )
     {
         $this->startDirection = $startDirection;
         $this->seat = $seat;
-        $this->luggageInstructions = $luggageInstructions;
         $this->endDirection = $endDirection;
         $this->trainNumber = $trainNumber;
     }
@@ -68,10 +64,9 @@ class TrainStationCard extends BoardingCard
         $startDirection = $jsonObject->startDirection;
         $endDirection = $jsonObject->endDirection;
         $seat = $jsonObject->seat;
-        $luggageInstructions = $jsonObject->luggageInstructions;
         $trainNumber = $jsonObject->trainNumber;
 
-        return new TrainStationCard($startDirection, $endDirection, $seat, $trainNumber, $luggageInstructions);
+        return new TrainStationCard($startDirection, $endDirection, $seat, $trainNumber);
     }
 
     public function getTransportationType(): string

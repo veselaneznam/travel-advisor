@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.0.8",
+        "php": "^7.1",
         "ext-iconv": "*",
         "nelmio/api-doc-bundle": "^3.2",
         "nelmio/cors-bundle": "^1.5",
