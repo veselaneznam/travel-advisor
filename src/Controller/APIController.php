@@ -11,7 +11,6 @@ namespace App\Controller;
 
 use App\Services\BoardingCardRepresenter;
 use App\Services\BoardingCardServiceInterface;
-use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -60,26 +59,19 @@ class APIController extends Controller
      *     description="Returns travel cards instructions sorted",
      * )
      * @SWG\Tag(name="sort")
+     * @param Request $request
+     * @return JsonResponse
      */
     public function sortAction(Request $request)
     {
         try {
             $requestBody = $request->getContent();
             foreach ($requestBody as $item) {
-                $unsortedBoardingCards[] = $this->boardingCardRepresenter->toDomain($item);
+                $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
             }
             $sortedBoardingCards = $this->boardingCardService->sort($unsortedBoardingCards);
 
-            $result = [];
-
-            /**
-             * @var BoardingCardInterface $boardingCard
-             */
-            foreach ($sortedBoardingCards as $boardingCard) {
-                $result[] = $boardingCard->getInstructions();
-            }
-
-            return new JsonResponse($result, 200);
+            return new JsonResponse($sortedBoardingCards, 200);
         } catch (\Exception $exception) {
             if($exception->getCode() == 400) {
                 return new JsonResponse($exception->getMessage(), $exception->getCode());

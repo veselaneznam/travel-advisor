@@ -9,10 +9,10 @@
 namespace App\TravelAdvisor\Domain\Services;
 
 use App\Services\BoardingCardServiceInterface;
-use App\TravelAdvisor\Domain\Model\BoardingCard;
 use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
 use App\TravelAdvisor\Domain\Repository\BoardingCardRepository;
 use App\TravelAdvisor\Domain\Repository\DirectionRepository;
+use App\TravelAdvisor\Domain\Values\LinkedObject;
 
 class BoardingCardService implements BoardingCardServiceInterface
 {
@@ -44,14 +44,13 @@ class BoardingCardService implements BoardingCardServiceInterface
     public function sort(array $boardingCardList)
     {
         $firstElement = $this->getFirst($boardingCardList);
-        array_unshift($boardingCardList, $firstElement, $firstElement->getNext());
-        $result = [];
-        $size = count($boardingCardList) - 1;
-         for ($i = 1; $i <= $size; $i ++) {
-             $result[] = $boardingCardList[$i]->getNext($boardingCardList);
-         }
+        $head = new LinkedObject($firstElement, null, $firstElement->getNext($boardingCardList));
 
-         return [$firstElement] + $result;
+        $this->append($boardingCardList, $head);
+
+        return array_map(function(BoardingCardInterface $element) {
+            return BoardingCardJsonRepresenter::toString($element);
+        }, $head->toArray());
     }
 
     /**
@@ -65,6 +64,27 @@ class BoardingCardService implements BoardingCardServiceInterface
                 $prev = $boardingCard->getPrev($boardingCardList);
                 if($prev->getStartDirection()->getName() == $boardingCard->getStartDirection()->getName()) {
                    return $boardingCard;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $boardingCardList
+     * @param $head
+     */
+    private function append(array $boardingCardList, LinkedObject &$head): void
+    {
+        foreach ($boardingCardList as $key => $boardingCard) {
+            if(!empty($boardingCardList)) {
+                if ($head->getNext() == $boardingCard) {
+                    $head->append(new LinkedObject(
+                        $boardingCard,
+                        $boardingCard->getPrev($boardingCardList),
+                        $boardingCard->getNext($boardingCardList)
+                    ));
+                    unset($boardingCardList[$key]);
+                    $this->append($boardingCardList, $head);
                 }
             }
         }

@@ -63,4 +63,9 @@ interface BoardingCardInterface
      * @return BoardingCardInterface
      */
     public function getPrev(array $boardingCards) : BoardingCardInterface;
+
+    /**
+     * @return array
+     */
+    public function toArray() : array;
 }

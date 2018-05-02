@@ -16,11 +16,11 @@ interface BoardingCardRepresenter
      * @param string $text
      * @return BoardingCardInterface
      */
-    public function toDomain(string $text) : BoardingCardInterface;
+    public static function toDomain(string $text) : BoardingCardInterface;
 
     /**
      * @param BoardingCardInterface $boardingCard
      * @return string
      */
-    public function toString(BoardingCardInterface $boardingCard) : string;
+    public static function toString(BoardingCardInterface $boardingCard) : string;
 }

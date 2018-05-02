@@ -20,25 +20,11 @@ use App\TravelAdvisor\Domain\Values\BoardingCardType;
 class BoardingCardJsonRepresenter implements BoardingCardRepresenter
 {
     /**
-     * @var DirectionRepository
-     */
-    private $directionRepository;
-
-    /**
-     * BoardingCardJsonRepresenter constructor.
-     * @param DirectionRepository $directionRepository
-     */
-    public function __construct(DirectionRepository $directionRepository)
-    {
-        $this->directionRepository = $directionRepository;
-    }
-
-    /**
      * @param string $text
      * @return BoardingCardInterface
      * @throws \App\TravelAdvisor\Domain\Exceptions\MissingArgumentException
      */
-    public function toDomain(string $text): BoardingCardInterface
+    public static function toDomain(string $text): BoardingCardInterface
     {
         $boardingCard = json_decode($text);
         $instance = null;
@@ -55,7 +41,7 @@ class BoardingCardJsonRepresenter implements BoardingCardRepresenter
      * @param BoardingCardInterface $boardingCard
      * @return string
      */
-    public function toString(BoardingCardInterface $boardingCard): string
+    public static function toString(BoardingCardInterface $boardingCard): string
     {
         return json_encode($boardingCard->toArray());
     }
