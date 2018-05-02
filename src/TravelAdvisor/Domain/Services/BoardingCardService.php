@@ -10,32 +10,10 @@ namespace App\TravelAdvisor\Domain\Services;
 
 use App\Services\BoardingCardServiceInterface;
 use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
-use App\TravelAdvisor\Domain\Repository\BoardingCardRepository;
-use App\TravelAdvisor\Domain\Repository\DirectionRepository;
-use App\TravelAdvisor\Domain\Values\LinkedObject;
+use App\TravelAdvisor\Domain\Model\NullCard;
 
 class BoardingCardService implements BoardingCardServiceInterface
 {
-    /**
-     * @var BoardingCardRepository
-     */
-    private $boardingCardRepository;
-
-    /**
-     * @var DirectionRepository
-     */
-    private $directionRepository;
-
-    /**
-     * BoardingCardService constructor.
-     * @param BoardingCardRepository $boardingCardRepository
-     * @param DirectionRepository $directionRepository
-     */
-    public function __construct(BoardingCardRepository $boardingCardRepository, DirectionRepository $directionRepository)
-    {
-        $this->boardingCardRepository = $boardingCardRepository;
-        $this->directionRepository = $directionRepository;
-    }
 
     /**
      * @param BoardingCardInterface[] $boardingCardList
@@ -43,49 +21,28 @@ class BoardingCardService implements BoardingCardServiceInterface
      */
     public function sort(array $boardingCardList)
     {
-        $firstElement = $this->getFirst($boardingCardList);
-        $head = new LinkedObject($firstElement, null, $firstElement->getNext($boardingCardList));
-
-        $this->append($boardingCardList, $head);
+        $head = [];
+        while(count($boardingCardList) > 0) {
+           list($firstBoardingCard, $key) = $this->getFirst($boardingCardList);
+           unset($boardingCardList[$key]);
+           $head[] = $firstBoardingCard;
+        }
 
         return array_map(function(BoardingCardInterface $element) {
             return BoardingCardJsonRepresenter::toString($element);
-        }, $head->toArray());
+        }, $head);
     }
 
     /**
      * @param BoardingCardInterface[] $boardingCardList
-     * @return mixed
+     * @return array
      */
-    public function getFirst($boardingCardList)
-    {
-        foreach ($boardingCardList as $boardingCard) {
-            if($boardingCard->getEndDirection()->getCoordinates() != null && $boardingCard->getStartDirection()->getCoordinates() !== null){
-                $prev = $boardingCard->getPrev($boardingCardList);
-                if($prev->getStartDirection()->getName() == $boardingCard->getStartDirection()->getName()) {
-                   return $boardingCard;
-                }
-            }
-        }
-    }
-
-    /**
-     * @param array $boardingCardList
-     * @param $head
-     */
-    private function append(array $boardingCardList, LinkedObject &$head): void
+    public function getFirst(array $boardingCardList) : array
     {
         foreach ($boardingCardList as $key => $boardingCard) {
-            if(!empty($boardingCardList)) {
-                if ($head->getNext() == $boardingCard) {
-                    $head->append(new LinkedObject(
-                        $boardingCard,
-                        $boardingCard->getPrev($boardingCardList),
-                        $boardingCard->getNext($boardingCardList)
-                    ));
-                    unset($boardingCardList[$key]);
-                    $this->append($boardingCardList, $head);
-                }
+            $prev = $boardingCard->getPrev($boardingCardList);
+            if ($prev instanceof NullCard) {
+                return [$boardingCard, $key];
             }
         }
     }

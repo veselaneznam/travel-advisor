@@ -16,4 +16,6 @@ class BoardingCardType
     const AIRPORT = 'airport';
 
     const TRAIN = 'train';
+
+    const NONE = 'none';
 }

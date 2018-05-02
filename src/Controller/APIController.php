@@ -65,7 +65,7 @@ class APIController extends Controller
     public function sortAction(Request $request)
     {
         try {
-            $requestBody = $request->getContent();
+            $requestBody = json_decode($request->getContent());
             foreach ($requestBody as $item) {
                 $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
             }

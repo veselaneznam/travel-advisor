@@ -9,22 +9,20 @@
 namespace App\TravelAdvisor\Domain\Model;
 
 
-use App\TravelAdvisor\Domain\Values\Seat;
-
 abstract class BoardingCard implements BoardingCardInterface
 {
     /**
-     * @var Direction
+     * @var string
      */
     protected $startDirection;
 
     /**
-     * @var Direction
+     * @var string
      */
     protected $endDirection;
 
     /**
-     * @var Seat
+     * @var string
      */
     protected $seat;
 
@@ -38,74 +36,54 @@ abstract class BoardingCard implements BoardingCardInterface
      */
     protected $luggageInstructions;
 
-
-    public function getInstructions(): string
-    {
-        // TODO: Implement getInstructions() method.
-    }
-
-
     /**
-     * @return Direction
+     * @return string
      */
-    public function getStartDirection() : Direction
+    public function getStartDirection() : string
     {
         return $this->startDirection;
     }
 
     /**
-     * @return Direction
-     */
-    public function getEndDirection(): Direction
-    {
-        return $this->endDirection;
-    }
-
-    /**
      * @return string
      */
-    public function getSeatNumber(): string
+    public function getEndDirection(): string
     {
-        return 'Gate ' . $this->gate . ', ' . $this->seat->getSeat();
+        return $this->endDirection;
     }
 
     public function toArray() : array
     {
         return [
-            'startDirection' => $this->startDirection->toArray(),
-            'endDirection' => $this->endDirection->toArray(),
-            'transportationType' => $this->getTransportationType(),
-            'pointNumber' => $this->getPointNumber(),
-            'seatNumber' => $this->getSeatNumber(),
-            'luggageInstructions' => $this->getLuggageInstructions(),
             'instructions' => $this->getInstructions()
         ];
     }
 
     /**
      * @param BoardingCardInterface[] $boardingCardList
-     * @return BoardingCardInterface|mixed
+     * @return BoardingCardInterface|null
      */
     public function getNext(array $boardingCardList):BoardingCardInterface
     {
         foreach ($boardingCardList as $boardingCard) {
-            if($this->getEndDirection()->getName() == $boardingCard->getStartDirection()->getName()) {
+            if($this->getEndDirection() == $boardingCard->getStartDirection()) {
                 return $boardingCard;
             }
         }
+        return new NullCard();
     }
 
     /**
      * @param BoardingCardInterface[] $boardingCardList
-     * @return BoardingCardInterface|mixed
+     * @return BoardingCardInterface|null
      */
     public function getPrev(array $boardingCardList):BoardingCardInterface
     {
         foreach ($boardingCardList as $boardingCard) {
-            if($this->startDirection->getName() == $boardingCard->getEndDirection()->getName()) {
+            if($this->getStartDirection() == $boardingCard->getEndDirection()) {
                 return $boardingCard;
             }
         }
-        return $this;
+        return new NullCard();
     }
 }

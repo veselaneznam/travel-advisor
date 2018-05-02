@@ -13,10 +13,10 @@ use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
 interface BoardingCardRepresenter
 {
     /**
-     * @param string $text
+     * @param \stdClass $jsonObject
      * @return BoardingCardInterface
      */
-    public static function toDomain(string $text) : BoardingCardInterface;
+    public static function toDomain(\stdClass $jsonObject) : BoardingCardInterface;
 
     /**
      * @param BoardingCardInterface $boardingCard

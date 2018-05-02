@@ -8,7 +8,6 @@
 
 namespace App\Services;
 
-
 use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
 
 interface BoardingCardServiceInterface
@@ -18,4 +17,10 @@ interface BoardingCardServiceInterface
      * @return array
      */
     public function sort(array $boardingCardList);
+
+    /**
+     * @param $boardingCardList
+     * @return array
+     */
+    public function getFirst(array $boardingCardList) : array ;
 }

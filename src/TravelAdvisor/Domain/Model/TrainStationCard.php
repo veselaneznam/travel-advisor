@@ -14,33 +14,30 @@ use App\TravelAdvisor\Domain\Values\Seat;
 
 class TrainStationCard extends BoardingCard
 {
-    private const TRANSPORTATION_TYPE = 'train';
+    const TRANSPORTATION_TYPE = 'train';
 
     /**
-     * @var int
+     * @var string
      */
     private $trainNumber;
 
     /**
-     * @param Direction $startDirection
-     * @param Direction $endDirection
-     * @param Seat $seat
-     * @param int $trainNumber
-     * @param string $gate
+     * @param string $startDirection
+     * @param string $endDirection
+     * @param string $seat
+     * @param string $trainNumber
      * @param string $luggageInstructions
      */
     private function __construct(
-        Direction $startDirection,
-        Direction $endDirection,
-        Seat $seat,
-        int $trainNumber,
-        string $gate,
+        string $startDirection,
+        string $endDirection,
+        string $seat,
+        string $trainNumber,
         string $luggageInstructions
     )
     {
         $this->startDirection = $startDirection;
         $this->seat = $seat;
-        $this->gate = $gate;
         $this->luggageInstructions = $luggageInstructions;
         $this->endDirection = $endDirection;
         $this->trainNumber = $trainNumber;
@@ -51,38 +48,30 @@ class TrainStationCard extends BoardingCard
      * @return BoardingCardInterface
      * @throws MissingArgumentException
      */
-    public static function createFromJson($jsonObject) : BoardingCardInterface
+    public static function createFromJson(\stdClass $jsonObject) : BoardingCardInterface
     {
-        if(!property_exists('startDirection', $jsonObject)) {
+        if(!property_exists($jsonObject, 'startDirection')) {
             throw new MissingArgumentException('Missing property startDirection', 400);
         }
-        if(!property_exists('endDirection', $jsonObject)) {
+        if(!property_exists($jsonObject, 'endDirection')) {
             throw new MissingArgumentException('Missing property endDirection', 400);
         }
-        if(!property_exists('endDirection', $jsonObject)) {
-            throw new MissingArgumentException('Missing property endDirection', 400);
-        }
-        if(!property_exists('seat', $jsonObject)) {
+
+        if(!property_exists($jsonObject,'seat')) {
             throw new MissingArgumentException('Missing property seat', 400);
         }
-        if(!property_exists('gate', $jsonObject)) {
-            throw new MissingArgumentException('Missing property gate', 400);
-        }
-        if(!property_exists('luggageInstructions', $jsonObject)) {
-            throw new MissingArgumentException('Missing property luggageInstructions', 400);
-        }
-        if(!property_exists('trainNumber', $jsonObject)) {
+
+        if(!property_exists($jsonObject,'trainNumber')) {
             throw new MissingArgumentException('Missing property trainNumber', 400);
         }
 
-        $startDirection = Direction::createFromJson($jsonObject->startDirection);
-        $endDirection = Direction::createFromJson($jsonObject->endDirection);
-        $seat = new Seat($jsonObject->seat->number, $jsonObject->seat->letter, $jsonObject->seat->side);
-        $gate = $jsonObject->gate;
+        $startDirection = $jsonObject->startDirection;
+        $endDirection = $jsonObject->endDirection;
+        $seat = $jsonObject->seat;
         $luggageInstructions = $jsonObject->luggageInstructions;
         $trainNumber = $jsonObject->trainNumber;
 
-        return new TrainStationCard($startDirection, $endDirection, $seat, $trainNumber, $gate, $luggageInstructions);
+        return new TrainStationCard($startDirection, $endDirection, $seat, $trainNumber, $luggageInstructions);
     }
 
     public function getTransportationType(): string
@@ -95,9 +84,22 @@ class TrainStationCard extends BoardingCard
         return $this->trainNumber;
     }
 
-    public function getLuggageInstructions(): string
+    /**
+     * @return string
+     */
+    public function getSeatNumber(): string
     {
-        // TODO: Implement getLaggageIstructions() method.
+        return $this->seat;
     }
 
+    public function getInstructions(): string
+    {
+        return sprintf(
+            'Take train %s, from %s to %s. Sit in seat %s',
+            $this->getPointNumber(),
+            $this->getStartDirection(),
+            $this->getEndDirection(),
+            $this->getSeatNumber()
+        );
+    }
 }

@@ -1,0 +1,35 @@
+[
+  {
+    "transportationType": "bus",
+    "startDirection": "Plovdiv Aiport",
+    "endDirection": "Plovdiv Train Station",
+    "busNumber": "C1"
+  },
+  {
+    "transportationType": "bus",
+    "startDirection": "Bus Station",
+    "endDirection": "Sofia Airport",
+    "busNumber": "B2"
+  },
+  {
+    "transportationType": "train",
+    "startDirection": "Plovdiv Train Station",
+    "endDirection": "Burgas",
+    "seat": "1C",
+    "gate": "1B",
+    "luggageInstructions": "Get your luggage from Gate B11",
+    "trainNumber": "12WE"
+  },
+  {
+    "transportationType": "airport",
+    "startDirection": "Sofia",
+    "endDirection": "Plovdiv Aiport",
+    "seat": "1C",
+    "gate": "1B",
+    "luggageInstructions": "Get your luggage from Gate B11",
+    "flightNumber": "12323BBB"
+  },
+  {
+    "transportationType" : "none"
+  }
+]

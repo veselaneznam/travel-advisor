@@ -13,20 +13,20 @@ use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
 
 class BusStationCard extends BoardingCard
 {
-    private const TRANSPORTATION_TYPE = 'bus';
+    const TRANSPORTATION_TYPE = 'bus';
 
     /**
-     * @var int
+     * @var string
      */
     private $busNumber;
 
     /**
      * BusStation constructor.
-     * @param Direction $startDirection
-     * @param Direction $endDirection
-     * @param int $busNumber
+     * @param string $busNumber
+     * @param string $startDirection
+     * @param string $endDirection
      */
-    public function __construct(Direction $startDirection, Direction $endDirection, int $busNumber)
+    public function __construct(string $busNumber, string $startDirection, string $endDirection)
     {
         $this->startDirection = $startDirection;
         $this->endDirection = $endDirection;
@@ -38,30 +38,23 @@ class BusStationCard extends BoardingCard
      * @return BoardingCardInterface
      * @throws MissingArgumentException
      */
-    public static function createFromJson($jsonObject): BoardingCardInterface
+    public static function createFromJson(\stdClass $jsonObject): BoardingCardInterface
     {
-        if(!property_exists('startDirection', $jsonObject)) {
+        if(!property_exists($jsonObject, 'startDirection')) {
             throw new MissingArgumentException('Missing property startDirection', 400);
         }
-        if(!property_exists('endDirection', $jsonObject)) {
+        if(!property_exists($jsonObject,'endDirection')) {
             throw new MissingArgumentException('Missing property endDirection', 400);
         }
-        if(!property_exists('busNumber', $jsonObject)) {
+        if(!property_exists($jsonObject, 'busNumber')) {
             throw new MissingArgumentException('Missing property busNumber', 400);
         }
-        $startDirection = Direction::createFromJson($jsonObject->startDirection);
-        $endDirection = Direction::createFromJson($jsonObject->endDirection);
+
+        $startDirection = $jsonObject->startDirection;
+        $endDirection = $jsonObject->endDirection;
         $busNumber = $jsonObject->busNumber;
 
-        return new BusStationCard($startDirection, $endDirection, $busNumber);
-    }
-
-    /**
-     * @return Direction
-     */
-    public function getStartDirection(): Direction
-    {
-        return $this->startDirection;
+        return new BusStationCard($busNumber, $startDirection, $endDirection);
     }
 
     /**
@@ -70,14 +63,6 @@ class BusStationCard extends BoardingCard
     public function getBusNumber(): int
     {
         return $this->busNumber;
-    }
-
-    /**
-     * @return Direction
-     */
-    public function getEndDirection(): Direction
-    {
-        return $this->endDirection;
     }
 
     public function getTransportationType(): string
@@ -90,18 +75,18 @@ class BusStationCard extends BoardingCard
         return $this->busNumber;
     }
 
-    public function getLuggageInstructions(): string
-    {
-        return '';
-    }
-
     public function getSeatNumber(): string
     {
-        return 'No seat assignment';
+        return 'No seat assignment.';
     }
 
     public function getInstructions(): string
     {
-        // TODO: Implement getInstructions() method.
+        return sprintf(
+            'Take the bus from %s to %s. %s',
+            $this->getStartDirection(),
+            $this->getEndDirection(),
+            $this->getSeatNumber()
+        );
     }
 }

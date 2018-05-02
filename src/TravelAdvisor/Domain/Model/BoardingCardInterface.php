@@ -12,9 +12,9 @@ namespace App\TravelAdvisor\Domain\Model;
 interface BoardingCardInterface
 {
     /**
-     * @return Direction
+     * @return string
      */
-    public function getStartDirection() : Direction;
+    public function getStartDirection(): string ;
 
     /**
      * @return string
@@ -29,17 +29,12 @@ interface BoardingCardInterface
     /**
      * @return string
      */
-    public function getLuggageInstructions(): string;
-
-    /**
-     * @return string
-     */
     public function getSeatNumber(): string;
 
     /**
-     * @return Direction
+     * @return string|null
      */
-    public function getEndDirection() : Direction;
+    public function getEndDirection(): string;
 
     /**
      * @return string
@@ -47,10 +42,10 @@ interface BoardingCardInterface
     public function getInstructions() : string;
 
     /**
-     * @param $jsonObject
+     * @param \stdClass $jsonObject
      * @return BoardingCardInterface
      */
-    public static function createFromJson($jsonObject) : BoardingCardInterface;
+    public static function createFromJson(\stdClass $jsonObject) : BoardingCardInterface;
 
     /**
      * @param array $boardingCards
