@@ -8,7 +8,6 @@
 
 namespace App\Tests\TravelAdvisor\Domain\Services;
 
-
 use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
 use App\TravelAdvisor\Domain\Exceptions\NotImplementedException;
 use App\TravelAdvisor\Domain\Services\BoardingCardJsonRepresenter;
@@ -32,8 +31,8 @@ class BoardingCardServiceTest extends TestCase
         }
 
         $boardingcardService = new BoardingCardService();
-        list($firstElement, $key) = $boardingcardService->getFirst($unsortedBoardingCards);
-        $this->assertEquals($expectedResult, $firstElement->toArray());
+        $firstElement = $boardingcardService->getFirstCardAsJsonString($unsortedBoardingCards);
+        $this->assertEquals($expectedResult, $firstElement);
     }
 
     /**
@@ -53,7 +52,7 @@ class BoardingCardServiceTest extends TestCase
         }
         $boardingcardService = new BoardingCardService();
 
-        $sortedBordingCards = $boardingcardService->sort($unsortedBoardingCards);
+        $sortedBordingCards = $boardingcardService->getSortedCardsAsJsonString($unsortedBoardingCards);
 
         $this->assertEquals($expected, $sortedBordingCards);
     }
@@ -63,16 +62,12 @@ class BoardingCardServiceTest extends TestCase
         return [
             'dataset 1 get first with sorted cards' => [
                 'jsonString' => file_get_contents(__DIR__ . '/data/sorted_cards.json'),
-                'expectedResult' => [
-                    'instructions' => 'Take the bus B2 from Bus Station to Sofia Airport. No seat assignment.'
-                ]
+                'expectedResult' => '{"instructions":"Take the bus B2 from Bus Station to Sofia Airport. No seat assignment."}'
             ],
 
             'dataset 2 get first with unsorted cards' => [
                 'jsonString' => file_get_contents(__DIR__ . '/data/unsorted_cards.json'),
-                'expectedResult' => [
-                    'instructions' => 'Take the bus B2 from Bus Station to Sofia Airport. No seat assignment.'
-                ]
+                'expectedResult' => '{"instructions":"Take the bus B2 from Bus Station to Sofia Airport. No seat assignment."}'
             ]
         ];
     }
@@ -107,6 +102,7 @@ class BoardingCardServiceTest extends TestCase
                     1 => '{"instructions":"From Sofia, take flight 12323BBB to Plovdiv Aiport. Gate 1B, seat 1C. Get your luggage from Gate B11"}',
                     2 => '{"instructions":"Take the bus C1 from Plovdiv Aiport to Plovdiv Train Station. No seat assignment."}',
                     3 => '{"instructions":"Take train 12WE, from Plovdiv Train Station to Burgas. Sit in seat 1C"}',
+                    4 => '{"instructions":"You have arrived at your final destination."}',
                 )
             ]
         ];

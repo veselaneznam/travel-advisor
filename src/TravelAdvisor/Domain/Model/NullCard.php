@@ -92,5 +92,4 @@ final class NullCard extends BoardingCard
     {
         return new NullCard();
     }
-
 }

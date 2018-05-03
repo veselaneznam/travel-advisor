@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response as HTTPResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class APIController extends Controller
@@ -23,10 +24,12 @@ class APIController extends Controller
      * @var BoardingCardServiceInterface
      */
     private $boardingCardService;
+
     /**
      * @var BoardingCardRepresenter
      */
     private $boardingCardRepresenter;
+
     /**
      * @var LoggerInterface
      */
@@ -61,15 +64,47 @@ class APIController extends Controller
     {
         try {
             $requestBody = json_decode($request->getContent());
+            $unsortedBoardingCards = [];
             if (!empty($requestBody)) {
                 foreach ($requestBody as $item) {
                     $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
                 }
-                $sortedBoardingCards = $this->boardingCardService->sort($unsortedBoardingCards);
+                $sortedBoardingCards = $this->boardingCardService->getSortedCardsAsJsonString($unsortedBoardingCards);
 
-                return new JsonResponse($sortedBoardingCards, 200);
+                return new JsonResponse($sortedBoardingCards, HTTPResponse::HTTP_OK);
             } else {
-                return new JsonResponse('You have provided bad request', 400);
+                return new JsonResponse('You have provided bad request', HTTPResponse::HTTP_BAD_REQUEST);
+            }
+        } catch (\Exception $exception) {
+            if($exception->getCode() == HTTPResponse::HTTP_BAD_REQUEST) {
+                return new JsonResponse($exception->getMessage(), $exception->getCode());
+            }
+            $this->logger->error($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    /**
+     * List sorted boarding cards instructions.
+     *
+     *
+     * @Route("/api/boarding-cards/first", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getFirstCardAction(Request $request)
+    {
+        try {
+            $requestBody = json_decode($request->getContent());
+            $unsortedBoardingCards = [];
+            if (!empty($requestBody)) {
+                foreach ($requestBody as $item) {
+                    $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
+                }
+                $firstCard = $this->boardingCardService->getFirstCardAsJsonString($unsortedBoardingCards);
+
+                return new JsonResponse($firstCard, HTTPResponse::HTTP_OK);
+            } else {
+                return new JsonResponse('You have provided bad request', HTTPResponse::HTTP_BAD_REQUEST);
             }
         } catch (\Exception $exception) {
             if($exception->getCode() == 400) {

@@ -55,16 +55,25 @@ final class BusStationCard extends BoardingCard
         return $this->cardNumber;
     }
 
+    /**
+     * @return string
+     */
     public function getTransportationType(): string
     {
         return self::TRANSPORTATION_TYPE;
     }
 
+    /**
+     * @return string
+     */
     public function getSeatNumber(): string
     {
         return $this->seat;
     }
 
+    /**
+     * @return string
+     */
     public function getInstructions(): string
     {
         return sprintf(

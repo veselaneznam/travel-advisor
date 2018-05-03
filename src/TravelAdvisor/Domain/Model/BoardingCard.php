@@ -49,6 +49,9 @@ abstract class BoardingCard implements BoardingCardInterface
         return $this->endDirection;
     }
 
+    /**
+     * @return array
+     */
     public function toArray() : array
     {
         return [

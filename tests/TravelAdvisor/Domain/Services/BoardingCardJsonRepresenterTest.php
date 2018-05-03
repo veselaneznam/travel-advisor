@@ -230,7 +230,6 @@ class BoardingCardJsonRepresenterTest extends TestCase
         );
     }
 
-
     /**
      * @throws MissingArgumentException
      */
@@ -252,7 +251,6 @@ class BoardingCardJsonRepresenterTest extends TestCase
         );
     }
 
-
     /**
      * @throws MissingArgumentException
      */
@@ -273,7 +271,6 @@ class BoardingCardJsonRepresenterTest extends TestCase
             BoardingCardJsonRepresenter::toString($boardinCard)
         );
     }
-
 
     /**
      * @throws MissingArgumentException
