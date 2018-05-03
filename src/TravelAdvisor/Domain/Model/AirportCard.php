@@ -10,14 +10,9 @@ namespace App\TravelAdvisor\Domain\Model;
 
 use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
 
-final class AirportCard extends BoardingCard
+final class AirportCard extends BoardingCard implements AirportInterface
 {
     const TRANSPORTATION_TYPE = 'airport';
-
-    /**
-     * @var string
-     */
-    private $flightNumber;
 
     /**
      * @var string
@@ -31,7 +26,7 @@ final class AirportCard extends BoardingCard
 
     /**
      * @param string $seat
-     * @param string $flightNumber
+     * @param string $cardNumber
      * @param string $gate
      * @param string $luggageInstructions
      * @param string $startDirection
@@ -39,14 +34,14 @@ final class AirportCard extends BoardingCard
      */
     private function __construct(
         string $seat,
-        string $flightNumber,
+        string $cardNumber,
         string $gate,
         string $luggageInstructions,
         string $startDirection,
         string $endDirection
     )
     {
-        $this->flightNumber = $flightNumber;
+        $this->cardNumber = $cardNumber;
         $this->seat = $seat;
         $this->gate = $gate;
         $this->luggageInstructions = $luggageInstructions;
@@ -56,29 +51,18 @@ final class AirportCard extends BoardingCard
 
     /**
      * @param $jsonObject
-     * @return BoardingCardInterface
+     * @return BoardingCard
      * @throws MissingArgumentException
      */
     public static function createFromJson(\stdClass $jsonObject) : BoardingCardInterface
     {
-        if(!property_exists($jsonObject, 'startDirection')) {
-            throw new MissingArgumentException('Missing property startDirection', 400);
-        }
-        if(!property_exists($jsonObject, 'endDirection')) {
-            throw new MissingArgumentException('Missing property endDirection', 400);
-        }
+        parent::validateBoardingCardInput($jsonObject);
 
-        if(!property_exists($jsonObject,'seat')) {
-            throw new MissingArgumentException('Missing property seat', 400);
-        }
-        if(!property_exists($jsonObject,'gate')) {
+        if (!property_exists($jsonObject, 'gate')) {
             throw new MissingArgumentException('Missing property gate', 400);
         }
-        if(!property_exists($jsonObject, 'luggageInstructions')) {
+        if (!property_exists($jsonObject, 'luggageInstructions')) {
             throw new MissingArgumentException('Missing property luggageInstructions', 400);
-        }
-        if(!property_exists($jsonObject, 'flightNumber')) {
-            throw new MissingArgumentException('Missing property flightNumber', 400);
         }
 
         $startDirection = $jsonObject->startDirection;
@@ -86,15 +70,15 @@ final class AirportCard extends BoardingCard
         $seat = $jsonObject->seat;
         $gate = $jsonObject->gate;
         $luggageInstructions = $jsonObject->luggageInstructions;
-        $flightNumber = $jsonObject->flightNumber;
+        $cardNumber = $jsonObject->cardNumber;
 
-        return new AirportCard($seat, $flightNumber, $gate, $luggageInstructions, $startDirection, $endDirection);
+        return new AirportCard($seat, $cardNumber, $gate, $luggageInstructions, $startDirection, $endDirection);
     }
 
     /**
      * @return string
      */
-    public function getTransportationType() : string
+    public function getTransportationType(): string
     {
         return self::TRANSPORTATION_TYPE;
     }
@@ -102,9 +86,9 @@ final class AirportCard extends BoardingCard
     /**
      * @return string
      */
-    public function getPointNumber(): string
+    public function getCardNumber(): string
     {
-        return $this->flightNumber;
+        return $this->cardNumber;
     }
 
     /**
@@ -114,7 +98,6 @@ final class AirportCard extends BoardingCard
     {
         return $this->luggageInstructions;
     }
-
 
     /**
      * @return string
@@ -127,11 +110,10 @@ final class AirportCard extends BoardingCard
     /**
      * @return string
      */
-    public function getGate():string
+    public function getGate(): string
     {
         return $this->gate;
     }
-
 
     /**
      * @return string
@@ -141,7 +123,7 @@ final class AirportCard extends BoardingCard
         return sprintf(
             'From %s, take flight %s to %s. Gate %s, seat %s. %s',
             $this->getStartDirection(),
-            $this->getPointNumber(),
+            $this->getCardNumber(),
             $this->getEndDirection(),
             $this->getGate(),
             $this->getSeatNumber(),

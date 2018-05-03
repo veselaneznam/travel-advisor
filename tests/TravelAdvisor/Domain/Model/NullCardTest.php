@@ -23,7 +23,20 @@ class NullCardTest extends TestCase
         $this->assertEquals('', $nullCard->getStartDirection());
         $this->assertEquals('', $nullCard->getEndDirection());
         $this->assertEquals('', $nullCard->getSeatNumber());
-        $this->assertEquals('', $nullCard->getPointNumber());
+        $this->assertEquals('', $nullCard->getCardNumber());
+        $this->assertEquals('You have arrived at your final destination.', $nullCard->getInstructions());
+    }
+
+    public function testCreationFromJsonWitNoData()
+    {
+        $nullCard = NullCard::createFromJson();
+        $this->assertInstanceOf(NullCard::class, $nullCard);
+        $this->assertInstanceOf(NullCard::class, $nullCard->getPrev([]));
+        $this->assertInstanceOf(NullCard::class, $nullCard->getNext([]));
+        $this->assertEquals('', $nullCard->getStartDirection());
+        $this->assertEquals('', $nullCard->getEndDirection());
+        $this->assertEquals('', $nullCard->getSeatNumber());
+        $this->assertEquals('', $nullCard->getCardNumber());
         $this->assertEquals('You have arrived at your final destination.', $nullCard->getInstructions());
     }
 }

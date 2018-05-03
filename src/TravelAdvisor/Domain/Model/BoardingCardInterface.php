@@ -24,7 +24,7 @@ interface BoardingCardInterface
     /**
      * @return string
      */
-    public function getPointNumber(): string;
+    public function getCardNumber(): string;
 
     /**
      * @return string

@@ -35,7 +35,7 @@ class BoardingCardTest extends TestCase
             'seat' => '1C',
             'gate' => '1B',
             'luggageInstructions' => 'Get your luggage from Gate B11',
-            'trainNumber' => '12WE'
+            'cardNumber' => '12WE'
         ];
         $expectedCard = TrainStationCard::createFromJson(json_decode(json_encode($expectedArray)));
         $this->assertEquals($expectedCard, $boardingCard->getNext($unsortedCards));
@@ -61,9 +61,6 @@ class BoardingCardTest extends TestCase
         $this->assertEquals($secondExpectedCard, $expectedCard->getPrev($unsortedCards));
     }
 
-    /**
-     * @throws MissingArgumentException
-     */
     public function testIsFirst()
     {
         $data = json_decode(file_get_contents(__DIR__ . '/data/unsorted_cards.json'));

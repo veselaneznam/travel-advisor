@@ -34,7 +34,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'seat' => '1C',
             'gate' => '1B',
             'luggageInstructions' => 'Get your luggage from Gate B11',
-            'flightNumber' => '12323BBB',
+            'cardNumber' => '12323BBB',
         ];
         $jsonString = json_encode($expected);
 
@@ -47,7 +47,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
         $this->assertEquals($expected['seat'], $boardingCard->getSeatNumber());
         $this->assertEquals($expected['gate'], $boardingCard->getGate());
         $this->assertEquals($expected['luggageInstructions'], $boardingCard->getLuggageInstructions());
-        $this->assertEquals($expected['flightNumber'], $boardingCard->getPointNumber());
+        $this->assertEquals($expected['cardNumber'], $boardingCard->getCardNumber());
         $this->assertEquals(
             'From Sofia, take flight 12323BBB to Plovdiv. Gate 1B, seat 1C. Get your luggage from Gate B11',
             $boardingCard->getInstructions()
@@ -81,7 +81,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'seat' => '1C',
             'gate' => '1B',
             'luggageInstructions' => 'Get your luggage from Gate B11',
-            'flightNumber' => '12323BBB',
+            'cardNumber' => '12323BBB',
         ];
         $jsonString = json_encode($expected);
 
@@ -100,7 +100,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'transportationType' => BoardingCardType::BUS,
             'startDirection' => 'Sofia',
             'endDirection' => 'Plovdiv',
-            'busNumber' => '1C',
+            'cardNumber' => '1C',
             'seat' => 'Seat 2d'
         ];
         $jsonString = json_encode($expected);
@@ -110,7 +110,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
         $this->assertEquals($expected['transportationType'], $boardingCard->getTransportationType());
         $this->assertEquals($expected['startDirection'], $boardingCard->getStartDirection());
         $this->assertEquals($expected['endDirection'], $boardingCard->getEndDirection());
-        $this->assertEquals($expected['busNumber'], $boardingCard->getPointNumber());
+        $this->assertEquals($expected['cardNumber'], $boardingCard->getCardNumber());
         $this->assertEquals($expected['seat'], $boardingCard->getSeatNumber());
         $this->assertEquals(
             'Take the bus 1C from Sofia to Plovdiv. Seat 2d',
@@ -132,7 +132,6 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'seat' => '1C',
             'gate' => '1B',
             'luggageInstructions' => 'Get your luggage from Gate B11',
-            'flightNumber' => '12323BBB',
         ];
         $jsonString = json_encode($expected);
 
@@ -151,7 +150,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'transportationType' => BoardingCardType::TRAIN,
             'startDirection' => 'Sofia',
             'endDirection' => 'Plovdiv',
-            'trainNumber' => '1C',
+            'cardNumber' => '1C',
             'seat' => '1'
         ];
         $jsonString = json_encode($expected);
@@ -161,7 +160,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
         $this->assertEquals($expected['transportationType'], $boardingCard->getTransportationType());
         $this->assertEquals($expected['startDirection'], $boardingCard->getStartDirection());
         $this->assertEquals($expected['endDirection'], $boardingCard->getEndDirection());
-        $this->assertEquals($expected['trainNumber'], $boardingCard->getPointNumber());
+        $this->assertEquals($expected['cardNumber'], $boardingCard->getCardNumber());
         $this->assertEquals($expected['seat'], $boardingCard->getSeatNumber());
         $this->assertEquals(
             'Take train 1C, from Sofia to Plovdiv. Sit in seat 1',
@@ -198,7 +197,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'transportationType' => BoardingCardType::NONE,
             'startDirection' => 'Sofia',
             'endDirection' => 'Plovdiv',
-            'trainNumber' => '1C',
+            'cardNumber' => '1C',
             'seat' => '1'
         ];
         $jsonString = json_encode($expected);
@@ -207,22 +206,19 @@ class BoardingCardJsonRepresenterTest extends TestCase
         $this->assertInstanceOf(NullCard::class, $boardingCard);
         $this->assertEquals('', $boardingCard->getStartDirection());
         $this->assertEquals('', $boardingCard->getEndDirection());
-        $this->assertEquals('', $boardingCard->getPointNumber());
+        $this->assertEquals('', $boardingCard->getCardNumber());
         $this->assertEquals('', $boardingCard->getSeatNumber());
         $this->assertEquals('You have arrived at your final destination.', $boardingCard->getInstructions());
 
     }
 
-    /**
-     * @throws MissingArgumentException
-     */
     public function testToStringNullCard()
     {
         $expected = [
             'transportationType' => BoardingCardType::NONE,
             'startDirection' => 'Sofia',
             'endDirection' => 'Plovdiv',
-            'trainNumber' => '1C',
+            'cardNumber' => '1C',
             'seat' => '1'
         ];
         $jsonString = json_encode($expected);
@@ -244,7 +240,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'transportationType' => BoardingCardType::BUS,
             'startDirection' => 'Sofia',
             'endDirection' => 'Plovdiv',
-            'busNumber' => '1C',
+            'cardNumber' => '1C',
             'seat' => 'Seat 1'
         ];
         $jsonString = json_encode($expected);
@@ -266,7 +262,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'transportationType' => BoardingCardType::TRAIN,
             'startDirection' => 'Sofia',
             'endDirection' => 'Plovdiv',
-            'trainNumber' => '1C',
+            'cardNumber' => '1C',
             'seat' => '1'
         ];
         $jsonString = json_encode($expected);
@@ -290,7 +286,7 @@ class BoardingCardJsonRepresenterTest extends TestCase
             'endDirection' => 'Plovdiv',
             'gate' => '1B',
             'luggageInstructions' => 'Get your luggage from Gate B11',
-            'flightNumber' => '12323BBB',
+            'cardNumber' => '12323BBB',
             'seat' => '12V'
         ];
         $jsonString = json_encode($expected);

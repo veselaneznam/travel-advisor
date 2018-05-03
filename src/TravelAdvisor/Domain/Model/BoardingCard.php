@@ -9,6 +9,8 @@
 namespace App\TravelAdvisor\Domain\Model;
 
 
+use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
+
 abstract class BoardingCard implements BoardingCardInterface
 {
     /**
@@ -26,6 +28,10 @@ abstract class BoardingCard implements BoardingCardInterface
      */
     protected $seat;
 
+    /**
+     * @var string
+     */
+    protected $cardNumber;
 
     /**
      * @return string
@@ -87,5 +93,28 @@ abstract class BoardingCard implements BoardingCardInterface
     public function isFirst(array $boardingCardList): bool
     {
        return ($this->getPrev($boardingCardList) instanceof NullCard) ? true : false;
+    }
+
+
+
+    /**
+     * @param \stdClass $jsonObject
+     * @throws MissingArgumentException
+     */
+    protected static function validateBoardingCardInput(\stdClass $jsonObject)
+    {
+        if (!property_exists($jsonObject, 'startDirection')) {
+            throw new MissingArgumentException('Missing property startDirection', 400);
+        }
+        if (!property_exists($jsonObject, 'endDirection')) {
+            throw new MissingArgumentException('Missing property endDirection', 400);
+        }
+
+        if (!property_exists($jsonObject, 'seat')) {
+            throw new MissingArgumentException('Missing property seat', 400);
+        }
+        if (!property_exists($jsonObject, 'cardNumber')) {
+            throw new MissingArgumentException('Missing property cardNumber', 400);
+        }
     }
 }

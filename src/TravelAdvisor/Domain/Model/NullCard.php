@@ -37,7 +37,7 @@ final class NullCard extends BoardingCard
     /**
      * @return string
      */
-    public function getPointNumber(): string
+    public function getCardNumber(): string
     {
         return '';
     }

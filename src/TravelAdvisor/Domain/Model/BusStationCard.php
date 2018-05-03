@@ -16,22 +16,17 @@ final class BusStationCard extends BoardingCard
     const TRANSPORTATION_TYPE = 'bus';
 
     /**
-     * @var string
-     */
-    private $busNumber;
-
-    /**
      * BusStation constructor.
-     * @param string $busNumber
+     * @param string $cardNumber
      * @param string $startDirection
      * @param string $endDirection
      * @param string $seat
      */
-    public function __construct(string $busNumber, string $startDirection, string $endDirection, string $seat)
+    public function __construct(string $cardNumber, string $startDirection, string $endDirection, string $seat)
     {
         $this->startDirection = $startDirection;
         $this->endDirection = $endDirection;
-        $this->busNumber = $busNumber;
+        $this->cardNumber = $cardNumber;
         $this->seat = $seat;
     }
 
@@ -42,43 +37,27 @@ final class BusStationCard extends BoardingCard
      */
     public static function createFromJson(\stdClass $jsonObject): BoardingCardInterface
     {
-        if(!property_exists($jsonObject, 'startDirection')) {
-            throw new MissingArgumentException('Missing property startDirection', 400);
-        }
-        if(!property_exists($jsonObject,'endDirection')) {
-            throw new MissingArgumentException('Missing property endDirection', 400);
-        }
-        if(!property_exists($jsonObject, 'busNumber')) {
-            throw new MissingArgumentException('Missing property busNumber', 400);
-        }
-        if(!property_exists($jsonObject, 'seat')) {
-            throw new MissingArgumentException('Missing property seat', 400);
-        }
+        parent::validateBoardingCardInput($jsonObject);
 
         $startDirection = $jsonObject->startDirection;
         $endDirection = $jsonObject->endDirection;
-        $busNumber = $jsonObject->busNumber;
+        $cardNumber = $jsonObject->cardNumber;
         $seat = $jsonObject->seat;
 
-        return new BusStationCard($busNumber, $startDirection, $endDirection, $seat);
+        return new BusStationCard($cardNumber, $startDirection, $endDirection, $seat);
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function getBusNumber(): int
+    public function getCardNumber(): string
     {
-        return $this->busNumber;
+        return $this->cardNumber;
     }
 
     public function getTransportationType(): string
     {
         return self::TRANSPORTATION_TYPE;
-    }
-
-    public function getPointNumber(): string
-    {
-        return $this->busNumber;
     }
 
     public function getSeatNumber(): string
@@ -90,7 +69,7 @@ final class BusStationCard extends BoardingCard
     {
         return sprintf(
             'Take the bus %s from %s to %s. %s',
-            $this->getPointNumber(),
+            $this->getCardNumber(),
             $this->getStartDirection(),
             $this->getEndDirection(),
             $this->getSeatNumber()

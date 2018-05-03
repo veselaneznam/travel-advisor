@@ -32,7 +32,9 @@ class BoardingCardJsonRepresenter implements BoardingCardRepresenter
         if (empty($jsonObject)) {
             throw new MissingArgumentException('Empty object', 400);
         }
+
         if (property_exists($jsonObject, 'transportationType')) {
+
             switch ($jsonObject->transportationType) {
                 case BoardingCardType::AIRPORT: return AirportCard::createFromJson($jsonObject);
                 case BoardingCardType::BUS: return BusStationCard::createFromJson($jsonObject);
