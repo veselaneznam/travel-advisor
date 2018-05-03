@@ -49,13 +49,4 @@ class BoardingCardJsonRepresenter implements BoardingCardRepresenter
         }
         throw new MissingArgumentException('Missing property transportationType', 400);
     }
-
-    /**
-     * @param BoardingCardInterface $boardingCard
-     * @return string
-     */
-    public static function toString(BoardingCardInterface $boardingCard): string
-    {
-        return json_encode($boardingCard->toArray());
-    }
 }

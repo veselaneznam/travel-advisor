@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class APIController extends Controller
 {
+    const MESSAGE_WRONG = 'Opps! Something went wrong. Please try again later!';
     /**
      * @var BoardingCardServiceInterface
      */
@@ -56,6 +57,27 @@ class APIController extends Controller
      * List sorted boarding cards instructions.
      *
      *
+     * @Route("/api/boarding-cards", methods={"GET"})
+     * @return JsonResponse
+     */
+    public function getCards()
+    {
+        try {
+            return new JsonResponse($this->boardingCardService->getAllCardsAsJsonString(), HTTPResponse::HTTP_OK);
+
+        } catch (\Exception $exception) {
+            if($exception->getCode() == HTTPResponse::HTTP_BAD_REQUEST) {
+                return new JsonResponse($exception->getMessage(), $exception->getCode());
+            }
+            $this->logger->error($exception->getMessage());
+            return new JsonResponse(self::MESSAGE_WRONG, HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * List sorted boarding cards instructions.
+     *
+     *
      * @Route("/api/boarding-cards/sort", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
@@ -69,7 +91,7 @@ class APIController extends Controller
                 foreach ($requestBody as $item) {
                     $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
                 }
-                $sortedBoardingCards = $this->boardingCardService->getSortedCardsAsJsonString($unsortedBoardingCards);
+                $sortedBoardingCards = $this->boardingCardService->getSortedCardsAsArray($unsortedBoardingCards);
 
                 return new JsonResponse($sortedBoardingCards, HTTPResponse::HTTP_OK);
             } else {
@@ -80,6 +102,7 @@ class APIController extends Controller
                 return new JsonResponse($exception->getMessage(), $exception->getCode());
             }
             $this->logger->error($exception->getMessage(), $exception->getCode());
+            return new JsonResponse(self::MESSAGE_WRONG, HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -100,7 +123,7 @@ class APIController extends Controller
                 foreach ($requestBody as $item) {
                     $unsortedBoardingCards[] = $this->boardingCardRepresenter::toDomain($item);
                 }
-                $firstCard = $this->boardingCardService->getFirstCardAsJsonString($unsortedBoardingCards);
+                $firstCard = $this->boardingCardService->getFirstCardAsArray($unsortedBoardingCards);
 
                 return new JsonResponse($firstCard, HTTPResponse::HTTP_OK);
             } else {
@@ -111,6 +134,7 @@ class APIController extends Controller
                 return new JsonResponse($exception->getMessage(), $exception->getCode());
             }
             $this->logger->error($exception->getMessage(), $exception->getCode());
+            return new JsonResponse(self::MESSAGE_WRONG, HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

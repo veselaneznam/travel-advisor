@@ -10,21 +10,40 @@ namespace App\TravelAdvisor\Domain\Services;
 
 use App\Services\BoardingCardServiceInterface;
 use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
+use App\TravelAdvisor\Domain\Repository\BoardingCardRepository;
 
 class BoardingCardService implements BoardingCardServiceInterface
 {
+    /**
+     * @var BoardingCardRepository
+     */
+    private $boardingCardRepository;
+
+    /**
+     * BoardingCardService constructor.
+     * @param BoardingCardRepository $boardingCardRepository
+     */
+    public function __construct(BoardingCardRepository $boardingCardRepository)
+    {
+        $this->boardingCardRepository = $boardingCardRepository;
+    }
+
+    public function getAllCardsAsJsonString(): array
+    {
+        return $this->boardingCardRepository->findAll();
+    }
 
     /**
      * @param BoardingCardInterface[] $boardingCardList
      * @return mixed
      */
-    public function getSortedCardsAsJsonString(array $boardingCardList)
+    public function getSortedCardsAsArray(array $boardingCardList)
     {
         $cardSorter = new CardSorter($boardingCardList);
         $cardSorter->sort();
 
         return array_map(function(BoardingCardInterface $element) {
-            return BoardingCardJsonRepresenter::toString($element);
+            return $element->toArray();
         }, $cardSorter->getSortedCards());
     }
 
@@ -32,11 +51,11 @@ class BoardingCardService implements BoardingCardServiceInterface
      * @param $boardingCardList
      * @return mixed
      */
-    public function getFirstCardAsJsonString(array $boardingCardList)
+    public function getFirstCardAsArray(array $boardingCardList)
     {
         $cardSorter = new CardSorter($boardingCardList);
         $firstCard = $cardSorter->getFirst();
 
-        return BoardingCardJsonRepresenter::toString($firstCard);
+        return $firstCard->toArray();
     }
 }

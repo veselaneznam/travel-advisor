@@ -9,7 +9,12 @@
 namespace App\TravelAdvisor\Domain\Repository;
 
 
+use App\TravelAdvisor\Domain\Model\BoardingCardInterface;
+
 interface BoardingCardRepository
 {
-
+    /**
+     * @return BoardingCardInterface[]
+     */
+    public function findAll();
 }

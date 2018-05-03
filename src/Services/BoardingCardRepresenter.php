@@ -17,10 +17,4 @@ interface BoardingCardRepresenter
      * @return BoardingCardInterface
      */
     public static function toDomain(\stdClass $jsonObject) : BoardingCardInterface;
-
-    /**
-     * @param BoardingCardInterface $boardingCard
-     * @return string
-     */
-    public static function toString(BoardingCardInterface $boardingCard) : string;
 }

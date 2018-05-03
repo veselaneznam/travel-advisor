@@ -10,6 +10,7 @@ namespace App\Tests\TravelAdvisor\Domain\Model;
 
 use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
 use App\TravelAdvisor\Domain\Model\AirportCard;
+use App\TravelAdvisor\Domain\Values\BoardingCardType;
 use PHPUnit\Framework\TestCase;
 
 class AirportCardTest extends TestCase
@@ -52,5 +53,28 @@ class AirportCardTest extends TestCase
     public function testCreationFromJsonWitWrongData()
     {
         AirportCard::createFromJson($this->data[0]);
+    }
+
+    /**
+     * @throws MissingArgumentException
+     */
+    public function testToArrayAirportCard()
+    {
+        $expected = [
+            'transportationType' => BoardingCardType::AIRPORT,
+            'startDirection' => 'Sofia',
+            'endDirection' => 'Plovdiv',
+            'gate' => '1B',
+            'luggageInstructions' => 'Get your luggage from Gate B11',
+            'cardNumber' => '12323BBB',
+            'seat' => '12V'
+        ];
+        $jsonString = json_encode($expected);
+        $item = json_decode($jsonString);
+        $boardinCard = AirportCard::createFromJson($item);
+        $this->assertEquals(
+            ["instructions" => "From Sofia, take flight 12323BBB to Plovdiv. Gate 1B, seat 12V. Get your luggage from Gate B11"],
+            $boardinCard->toArray()
+        );
     }
 }

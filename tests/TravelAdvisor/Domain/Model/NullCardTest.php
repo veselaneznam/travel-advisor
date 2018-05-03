@@ -9,6 +9,7 @@
 namespace App\Tests\TravelAdvisor\Domain\Model;
 
 use App\TravelAdvisor\Domain\Model\NullCard;
+use App\TravelAdvisor\Domain\Values\BoardingCardType;
 use PHPUnit\Framework\TestCase;
 
 class NullCardTest extends TestCase
@@ -38,5 +39,23 @@ class NullCardTest extends TestCase
         $this->assertEquals('', $nullCard->getSeatNumber());
         $this->assertEquals('', $nullCard->getCardNumber());
         $this->assertEquals('You have arrived at your final destination.', $nullCard->getInstructions());
+    }
+
+    public function testToArrayNullCard()
+    {
+        $expected = [
+            'transportationType' => BoardingCardType::NONE,
+            'startDirection' => 'Sofia',
+            'endDirection' => 'Plovdiv',
+            'cardNumber' => '1C',
+            'seat' => '1'
+        ];
+        $jsonString = json_encode($expected);
+        $item = json_decode($jsonString);
+        $boardinCard = NullCard::createFromJson($item);
+        $this->assertEquals(
+            ["instructions" => "You have arrived at your final destination."],
+            $boardinCard->toArray()
+        );
     }
 }

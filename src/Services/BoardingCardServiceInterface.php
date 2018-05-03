@@ -16,11 +16,16 @@ interface BoardingCardServiceInterface
      * @param BoardingCardInterface[] $boardingCardList
      * @return array
      */
-    public function getSortedCardsAsJsonString(array $boardingCardList);
+    public function getSortedCardsAsArray(array $boardingCardList);
 
     /**
      * @param $boardingCardList
      * @return mixed
      */
-    public function getFirstCardAsJsonString(array $boardingCardList);
+    public function getFirstCardAsArray(array $boardingCardList);
+
+    /**
+     * @return array
+     */
+    public function getAllCardsAsJsonString() : array;
 }
