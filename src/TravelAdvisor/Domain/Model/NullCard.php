@@ -9,8 +9,13 @@
 namespace App\TravelAdvisor\Domain\Model;
 
 
-class NullCard extends BoardingCard
+final class NullCard extends BoardingCard
 {
+    private function __construct()
+    {
+
+    }
+
     const TRANSPORTATION_TYPE = 'none';
 
     /**
@@ -65,7 +70,7 @@ class NullCard extends BoardingCard
      * @param \stdClass $jsonObject
      * @return BoardingCardInterface
      */
-    public static function createFromJson(\stdClass $jsonObject): BoardingCardInterface
+    public static function createFromJson(\stdClass $jsonObject = null): BoardingCardInterface
     {
         return new NullCard();
     }
@@ -74,7 +79,7 @@ class NullCard extends BoardingCard
      * @param array $boardingCards
      * @return BoardingCardInterface
      */
-    public function getNext(array $boardingCards): BoardingCardInterface
+    public function getNext(array $boardingCards = []): BoardingCardInterface
     {
         return new NullCard();
     }
@@ -83,7 +88,7 @@ class NullCard extends BoardingCard
      * @param array $boardingCards
      * @return BoardingCardInterface
      */
-    public function getPrev(array $boardingCards): BoardingCardInterface
+    public function getPrev(array $boardingCards = []): BoardingCardInterface
     {
         return new NullCard();
     }

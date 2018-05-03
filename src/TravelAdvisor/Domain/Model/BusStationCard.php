@@ -11,7 +11,7 @@ namespace App\TravelAdvisor\Domain\Model;
 
 use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
 
-class BusStationCard extends BoardingCard
+final class BusStationCard extends BoardingCard
 {
     const TRANSPORTATION_TYPE = 'bus';
 

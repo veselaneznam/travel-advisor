@@ -26,15 +26,6 @@ abstract class BoardingCard implements BoardingCardInterface
      */
     protected $seat;
 
-    /**
-     * @var string
-     */
-    protected $gate;
-
-    /**
-     * @var string
-     */
-    protected $luggageInstructions;
 
     /**
      * @return string
@@ -66,11 +57,13 @@ abstract class BoardingCard implements BoardingCardInterface
     public function getNext(array $boardingCardList):BoardingCardInterface
     {
         foreach ($boardingCardList as $boardingCard) {
-            if($this->getEndDirection() == $boardingCard->getStartDirection()) {
+            if(property_exists($boardingCard, 'startDirection')
+                && $this->getEndDirection() == $boardingCard->getStartDirection()
+            ) {
                 return $boardingCard;
             }
         }
-        return new NullCard();
+        return NullCard::createFromJson();
     }
 
     /**
@@ -84,7 +77,7 @@ abstract class BoardingCard implements BoardingCardInterface
                 return $boardingCard;
             }
         }
-        return new NullCard();
+        return NullCard::createFromJson();
     }
 
     /**

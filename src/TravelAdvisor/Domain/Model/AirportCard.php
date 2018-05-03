@@ -10,7 +10,7 @@ namespace App\TravelAdvisor\Domain\Model;
 
 use App\TravelAdvisor\Domain\Exceptions\MissingArgumentException;
 
-class AirportCard extends BoardingCard
+final class AirportCard extends BoardingCard
 {
     const TRANSPORTATION_TYPE = 'airport';
 
@@ -18,6 +18,16 @@ class AirportCard extends BoardingCard
      * @var string
      */
     private $flightNumber;
+
+    /**
+     * @var string
+     */
+    private $luggageInstructions;
+
+    /**
+     * @var string
+     */
+    private $gate;
 
     /**
      * @param string $seat
